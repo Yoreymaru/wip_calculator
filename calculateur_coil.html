@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculateur de coil WIP</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-weight: bold;
+    }
+    html, body {
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('image/wip_100_transparent.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #ff4d4d;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.85);
+      z-index: -1;
+    }
+    .logo-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+    }
+    .logo-button img {
+      width: 5cm;
+      height: 5cm;
+      object-fit: contain;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .logo-button img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #ff4d4d;
+    }
+    header {
+      text-align: center;
+      padding: 2em 1em 1em;
+    }
+    header h1 {
+      font-size: 2.5em;
+      color: #ff4d4d;
+    }
+    header p {
+      font-size: 1.2em;
+      color: #ff9999;
+    }
+    main {
+      background-color: rgba(0, 0, 0, 0.75);
+      border-radius: 12px;
+      padding: 2em;
+      margin: 2em auto;
+      max-width: 600px;
+      width: 90%;
+      box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
+    }
+    label {
+      display: block;
+      margin-top: 1em;
+    }
+    select {
+      width: 100%;
+      padding: 0.75em;
+      margin-top: 0.5em;
+      border: 2px solid #ff4d4d;
+      border-radius: 6px;
+      background-color: #1c1c1c;
+      color: #ff4d4d;
+      font-size: 1em;
+    }
+    button {
+      margin-top: 2em;
+      padding: 0.75em;
+      background-color: #ff4d4d;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 1.1em;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    button:hover {
+      background-color: #e60000;
+      transform: scale(1.03);
+    }
+    .result {
+      margin-top: 2em;
+      font-size: 1.3em;
+      text-align: center;
+    }
+    footer {
+      text-align: center;
+      margin: 3em auto 1em;
+      color: #ff4d4d;
+      font-size: 0.9em;
+    }
+    @media (max-width: 768px) {
+      .logo-button img {
+        width: 4cm;
+        height: 4cm;
+      }
+      header h1 {
+        font-size: 2em;
+      }
+      header p {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="logo-button">
+    <a href="https://www.wireinprogress.com" target="_blank">
+      <img src="image/wip_0_transparent.png" alt="Wire In Progress">
+    </a>
+  </div>
+  <header>
+    <h1>Calculateur de coil WIP</h1>
+    <p>Résistance estimée d’un montage avec fils âme + claptonnage</p>
+  </header>
+  <main>
+    <label for="material">Type de fil :</label>
+    <select id="material">
+      <option value="0.00017">Kanthal A1 (0,00017 Ω·cm)</option>
+      <option value="0.00011">Nichrome 80 (0,00011 Ω·cm)</option>
+      <option value="0.00006">Nichrome 90 (0,00006 Ω·cm)</option>
+      <option value="0.000075">SS316L (0,000075 Ω·cm)</option>
+    </select>
+
+    <label for="coreGauge">GA des âmes centrales :</label>
+    <select id="coreGauge"></select>
+
+    <label for="coreCount">Nombre de fils (âmes centrales) :</label>
+    <select id="coreCount"></select>
+
+    <label for="wrapGauge">GA du fil de claptonnage :</label>
+    <select id="wrapGauge"></select>
+
+    <label for="innerDiameter">Diamètre intérieur du coil :</label>
+    <select id="innerDiameter">
+      <option value="1">1 mm</option>
+      <option value="1.5">1.5 mm</option>
+      <option value="2">2 mm</option>
+      <option value="2.5" selected>2.5 mm</option>
+      <option value="3">3 mm</option>
+      <option value="3.5">3.5 mm</option>
+      <option value="4">4 mm</option>
+      <option value="4.5">4.5 mm</option>
+      <option value="5">5 mm</option>
+      <option value="5.5">5.5 mm</option>
+      <option value="6">6 mm</option>
+      <option value="6.5">6.5 mm</option>
+      <option value="7">7 mm</option>
+      <option value="7.5">7.5 mm</option>
+      <option value="8">8 mm</option>
+      <option value="8.5">8.5 mm</option>
+      <option value="9">9 mm</option>
+      <option value="9.5">9.5 mm</option>
+      <option value="10">10 mm</option>
+    </select>
+
+    <label for="wraps">Nombre de tours :</label>
+    <select id="wraps"></select>
+
+    <label for="coils">Nombre de coils :</label>
+    <select id="coils"></select>
+
+    <button onclick="calculateResistance()">Calculer</button>
+    <div class="result" id="result"></div>
+  </main>
+  <footer>
+    © 2025 Wire In Progress - Fait par des vapoteurs, pour des vapoteurs 🔧💨
+  </footer>
+  <script>
+    const awgToMm = {
+      20: 0.812, 21: 0.723, 22: 0.644, 23: 0.573, 24: 0.511,
+      25: 0.455, 26: 0.405, 27: 0.361, 28: 0.321, 29: 0.286,
+      30: 0.255, 31: 0.227, 32: 0.202, 33: 0.180, 34: 0.160,
+      35: 0.143, 36: 0.127, 37: 0.113, 38: 0.101, 39: 0.0897,
+      40: 0.0799, 41: 0.0712, 42: 0.0635, 43: 0.0566, 44: 0.0504,
+      45: 0.0447, 46: 0.0399, 47: 0.0355, 48: 0.0316, 49: 0.0282, 50: 0.0253
+    };
+
+    function populateGaugeSelect(id, defaultGA = 28) {
+      const select = document.getElementById(id);
+      for (let ga = 20; ga <= 50; ga++) {
+        const option = document.createElement("option");
+        option.value = ga;
+        option.text = `${ga} GA (${awgToMm[ga]} mm)`;
+        if (ga === defaultGA) option.selected = true;
+        select.appendChild(option);
+      }
+    }
+
+    function populateNumericSelect(id, max, selectedValue) {
+      const select = document.getElementById(id);
+      for (let i = 1; i <= max; i++) {
+        const option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        if (i === selectedValue) option.selected = true;
+        select.appendChild(option);
+      }
+    }
+
+    window.onload = () => {
+      populateGaugeSelect("coreGauge", 28);
+      populateGaugeSelect("wrapGauge", 36);
+      populateNumericSelect("coreCount", 25, 2);
+      populateNumericSelect("wraps", 25, 6);
+      populateNumericSelect("coils", 25, 1);
+    };
+
+    function calculateResistance() {
+      const resistivity = parseFloat(document.getElementById("material").value);
+      const coreGauge = parseInt(document.getElementById("coreGauge").value);
+      const wrapGauge = parseInt(document.getElementById("wrapGauge").value);
+      const coreCount = parseInt(document.getElementById("coreCount").value);
+      const innerDiameter = parseFloat(document.getElementById("innerDiameter").value) / 10;
+      const wraps = parseInt(document.getElementById("wraps").value);
+      const coils = parseInt(document.getElementById("coils").value);
+
+      const coreDiameter = awgToMm[coreGauge] / 10;
+      const coreArea = Math.PI * Math.pow(coreDiameter / 2, 2);
+      const totalArea = coreArea * coreCount;
+      const length = Math.PI * innerDiameter * wraps;
+
+      let resistance = (resistivity * length) / (totalArea * coils);
+      const min = resistance * 0.95;
+      const max = resistance * 1.05;
+      const wrapDiameter = awgToMm[wrapGauge];
+
+      document.getElementById("result").innerHTML = `
+        Résistance estimée : <strong>${resistance.toFixed(2)} Ω</strong><br>
+        Plage ±5% : ${min.toFixed(2)} Ω à ${max.toFixed(2)} Ω<br>
+        Longueur estimée : ${length.toFixed(2)} cm<br>
+        Clapton : âme ${coreCount}x${coreGauge} GA / wrap ${wrapGauge} GA (${wrapDiameter} mm)
+      `;
+    }
+  </script>
+</body>
+</html>
